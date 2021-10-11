@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_11_125434) do
+ActiveRecord::Schema.define(version: 2021_10_11_160246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,12 +27,32 @@ ActiveRecord::Schema.define(version: 2021_10_11_125434) do
     t.index ["city_id"], name: "index_addresses_on_city_id"
   end
 
+  create_table "businesses", force: :cascade do |t|
+    t.string "cnpj"
+    t.string "name"
+    t.string "phone"
+    t.string "email"
+    t.bigint "merchants_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["merchants_id"], name: "index_businesses_on_merchants_id"
+  end
+
   create_table "cities", force: :cascade do |t|
     t.string "name"
     t.bigint "state_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["state_id"], name: "index_cities_on_state_id"
+  end
+
+  create_table "clients", force: :cascade do |t|
+    t.string "name"
+    t.string "phone"
+    t.bigint "address_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["address_id"], name: "index_clients_on_address_id"
   end
 
   create_table "deliverymen", force: :cascade do |t|
@@ -46,6 +66,56 @@ ActiveRecord::Schema.define(version: 2021_10_11_125434) do
     t.index ["address_id"], name: "index_deliverymen_on_address_id"
     t.index ["user_id"], name: "index_deliverymen_on_user_id"
     t.index ["vehicle_id"], name: "index_deliverymen_on_vehicle_id"
+  end
+
+  create_table "managers", force: :cascade do |t|
+    t.string "name"
+    t.string "cpf"
+    t.string "cnpj"
+    t.string "phone"
+    t.string "role"
+    t.bigint "address_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["address_id"], name: "index_managers_on_address_id"
+    t.index ["user_id"], name: "index_managers_on_user_id"
+  end
+
+  create_table "merchants", force: :cascade do |t|
+    t.string "name"
+    t.string "cpf"
+    t.string "cnpj"
+    t.string "phone"
+    t.bigint "address_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["address_id"], name: "index_merchants_on_address_id"
+    t.index ["user_id"], name: "index_merchants_on_user_id"
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.decimal "key"
+    t.text "description"
+    t.boolean "delivered"
+    t.bigint "clients_id", null: false
+    t.bigint "address_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["address_id"], name: "index_orders_on_address_id"
+    t.index ["clients_id"], name: "index_orders_on_clients_id"
+  end
+
+  create_table "shippings", force: :cascade do |t|
+    t.string "identifier"
+    t.string "status"
+    t.bigint "deliverymen_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "business_id", null: false
+    t.index ["business_id"], name: "index_shippings_on_business_id"
+    t.index ["deliverymen_id"], name: "index_shippings_on_deliverymen_id"
   end
 
   create_table "states", force: :cascade do |t|
@@ -77,8 +147,18 @@ ActiveRecord::Schema.define(version: 2021_10_11_125434) do
   end
 
   add_foreign_key "addresses", "cities"
+  add_foreign_key "businesses", "merchants", column: "merchants_id"
   add_foreign_key "cities", "states"
+  add_foreign_key "clients", "addresses"
   add_foreign_key "deliverymen", "addresses"
   add_foreign_key "deliverymen", "users"
   add_foreign_key "deliverymen", "vehicles"
+  add_foreign_key "managers", "addresses"
+  add_foreign_key "managers", "users"
+  add_foreign_key "merchants", "addresses"
+  add_foreign_key "merchants", "users"
+  add_foreign_key "orders", "addresses"
+  add_foreign_key "orders", "clients", column: "clients_id"
+  add_foreign_key "shippings", "businesses"
+  add_foreign_key "shippings", "deliverymen", column: "deliverymen_id"
 end

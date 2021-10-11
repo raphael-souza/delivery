@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  resources :businesses
+  resources :shippings
+  resources :orders
+  resources :clients
+  resources :managers
+  resources :merchants
   resources :deliverymen
   resources :vehicles
   resources :addresses
