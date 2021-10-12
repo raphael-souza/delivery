@@ -1,5 +1,7 @@
 # README
 
+Order management for couriers using Rails and jwt authentication
+
 This README would normally document whatever steps are necessary to get the
 application up and running.
 
