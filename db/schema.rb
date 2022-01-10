@@ -10,10 +10,43 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_02_183454) do
+ActiveRecord::Schema.define(version: 2022_01_10_121412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "description"
+    t.string "number"
+    t.string "reference"
+    t.string "street"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "clients", force: :cascade do |t|
+    t.string "name"
+    t.string "cpf"
+    t.string "phone"
+    t.bigint "address_id"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["address_id"], name: "index_clients_on_address_id"
+    t.index ["user_id"], name: "index_clients_on_user_id"
+  end
+
+  create_table "deliverymen", force: :cascade do |t|
+    t.string "name"
+    t.string "cpf"
+    t.string "phone"
+    t.bigint "user_id", null: false
+    t.bigint "address_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["address_id"], name: "index_deliverymen_on_address_id"
+    t.index ["user_id"], name: "index_deliverymen_on_user_id"
+  end
 
   create_table "jwt_denylist", force: :cascade do |t|
     t.string "jti", null: false
@@ -33,4 +66,6 @@ ActiveRecord::Schema.define(version: 2022_01_02_183454) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "deliverymen", "addresses"
+  add_foreign_key "deliverymen", "users"
 end
