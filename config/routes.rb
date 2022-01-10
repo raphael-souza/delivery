@@ -2,7 +2,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     resources :users
-    
+
   end
   
   devise_for :users,
@@ -11,7 +11,7 @@ Rails.application.routes.draw do
     path_names: {
       sign_in: 'api/login',
       sign_out: 'api/logout',
-      registration: 'api/signup'
+      # registration: 'api/signup'
     },
     controllers: {
       sessions: 'sessions',
