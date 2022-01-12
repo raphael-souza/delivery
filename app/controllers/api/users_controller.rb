@@ -2,8 +2,16 @@ class Api::UsersController < Api::BaseController
 
   before_action :find_user, only: %w[show]
 
-  def show
-    render_jsonapi_response(@user)
+  def show 
+    render_jsonapi_response(UserSerializer.new(@user))
+  end
+
+  def index
+    users = User.all
+ 
+    render json: UserSerializer.new(users), status: :ok
+ 
+    # render_jsonapi_response(users)
   end
 
   def create 
