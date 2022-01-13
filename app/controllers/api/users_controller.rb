@@ -9,16 +9,15 @@ class Api::UsersController < Api::BaseController
   def index
     users = User.all
  
-    render json: UserSerializer.new(users), status: :ok
- 
-    # render_jsonapi_response(users)
+    render_jsonapi_response(UserSerializer.new(users))
   end
 
-  def create 
-    user = User.new(user_params)
-    user.save
-    
-    render_jsonapi_response(user)
+  def update
+
+  end
+
+  def destroy
+
   end
 
   private
