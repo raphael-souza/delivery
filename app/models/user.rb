@@ -7,5 +7,8 @@ class User < ApplicationRecord
 
   has_one :client
   has_one :deliveryman
+
+  accepts_nested_attributes_for :client
+  accepts_nested_attributes_for :deliveryman
   
 end

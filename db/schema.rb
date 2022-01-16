@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_10_121412) do
+ActiveRecord::Schema.define(version: 2022_01_15_194041) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,17 +22,22 @@ ActiveRecord::Schema.define(version: 2022_01_10_121412) do
     t.string "street"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "city"
+    t.string "cep", limit: 9
+    t.string "district"
+    t.bigint "client_id"
+    t.bigint "deliveryman_id"
+    t.index ["client_id"], name: "index_addresses_on_client_id"
+    t.index ["deliveryman_id"], name: "index_addresses_on_deliveryman_id"
   end
 
   create_table "clients", force: :cascade do |t|
     t.string "name"
     t.string "cpf"
     t.string "phone"
-    t.bigint "address_id"
     t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["address_id"], name: "index_clients_on_address_id"
     t.index ["user_id"], name: "index_clients_on_user_id"
   end
 
@@ -41,10 +46,8 @@ ActiveRecord::Schema.define(version: 2022_01_10_121412) do
     t.string "cpf"
     t.string "phone"
     t.bigint "user_id", null: false
-    t.bigint "address_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["address_id"], name: "index_deliverymen_on_address_id"
     t.index ["user_id"], name: "index_deliverymen_on_user_id"
   end
 
@@ -66,6 +69,7 @@ ActiveRecord::Schema.define(version: 2022_01_10_121412) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "deliverymen", "addresses"
+  add_foreign_key "addresses", "clients"
+  add_foreign_key "addresses", "deliverymen"
   add_foreign_key "deliverymen", "users"
 end

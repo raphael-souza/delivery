@@ -21,3 +21,6 @@ Things you may want to cover:
 * Deployment instructions
 
 * ...
+
+* exibir qual processo na porta do postgresql: sudo ss -lptn 'sport = :5432'
+* finalizar processo:  sudo kill PID

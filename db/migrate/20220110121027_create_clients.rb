@@ -4,7 +4,6 @@ class CreateClients < ActiveRecord::Migration[6.1]
       t.string :name
       t.string :cpf
       t.string :phone
-      t.references :address
       t.references :user
 
       t.timestamps

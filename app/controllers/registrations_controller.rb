@@ -6,7 +6,7 @@ class RegistrationsController < Devise::RegistrationsController
     # sign_up(resource_name, resource) if resource.persisted?
 
     # render_jsonapi_response(resource)
- 
+     
     user = User.new(user_params)
     if user.save
       render_jsonapi_response(UserSerializer.new(user))

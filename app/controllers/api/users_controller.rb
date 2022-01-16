@@ -1,9 +1,13 @@
 class Api::UsersController < Api::BaseController
-
-  before_action :find_user, only: %w[show]
+  include JsonApiParamsAdapter
+  before_action :find_user, only: %w[show update]
 
   def show 
-    render_jsonapi_response(UserSerializer.new(@user))
+    options = {}
+    includes = params[:include] || []
+    options[:include] = includes.split(',')
+
+    render_jsonapi_response(UserSerializer.new(@user, options))
   end
 
   def index
@@ -12,8 +16,13 @@ class Api::UsersController < Api::BaseController
     render_jsonapi_response(UserSerializer.new(users))
   end
 
-  def update
-
+  def update 
+    if @user.update(update_user_params)
+      render_jsonapi_response(status: 200)
+    else
+      render_jsonapi_response(@user.errors)
+    end
+    
   end
 
   def destroy
@@ -26,9 +35,47 @@ class Api::UsersController < Api::BaseController
     params.require(:user).permit(:password, :password_confirmation, :email) if params[:user]
   end
 
+  def update_user_params
+    params.require(:data).permit(
+      :email,
+      client_attributes: [
+        :id,
+        :name,
+        :cpf,
+        :phone,
+        address_attributes: [
+          :description,
+          :number,
+          :reference,
+          :street,
+          :city,
+          :cep,
+          :district
+        ]
+      ],
+      deliveryman_attributes: [
+        :id,
+        :name,
+        :cpf,
+        :phone,
+        address_attributes: [
+          :description,
+          :number,
+          :reference,
+          :street,
+          :city,
+          :cep,
+          :district
+        ]
+      ]
+    )
+  end
+
 
   def find_user
     @user = User.find(params[:id])
+
+    raise ActiveRecord::RecordNotFound unless @user 
   end
 
 end
