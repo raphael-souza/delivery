@@ -1,0 +1,3 @@
+class Collect < ApplicationRecord
+   
+end

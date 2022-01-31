@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_15_194041) do
+ActiveRecord::Schema.define(version: 2022_01_20_110227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,17 @@ ActiveRecord::Schema.define(version: 2022_01_15_194041) do
     t.index ["user_id"], name: "index_clients_on_user_id"
   end
 
+  create_table "collects", force: :cascade do |t|
+    t.string "description"
+    t.string "status"
+    t.decimal "total_orders"
+    t.float "total_value"
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_collects_on_user_id"
+  end
+
   create_table "deliverymen", force: :cascade do |t|
     t.string "name"
     t.string "cpf"
@@ -57,6 +68,27 @@ ActiveRecord::Schema.define(version: 2022_01_15_194041) do
     t.index ["jti"], name: "index_jwt_denylist_on_jti"
   end
 
+  create_table "orders", force: :cascade do |t|
+    t.string "description"
+    t.string "recipient_name"
+    t.boolean "paid_aout"
+    t.decimal "value"
+    t.bigint "address_id", null: false
+    t.bigint "collect_id", null: false
+    t.bigint "user_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["address_id"], name: "index_orders_on_address_id"
+    t.index ["collect_id"], name: "index_orders_on_collect_id"
+    t.index ["user_id"], name: "index_orders_on_user_id"
+  end
+
+  create_table "rooms", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -71,5 +103,9 @@ ActiveRecord::Schema.define(version: 2022_01_15_194041) do
 
   add_foreign_key "addresses", "clients"
   add_foreign_key "addresses", "deliverymen"
+  add_foreign_key "collects", "users"
   add_foreign_key "deliverymen", "users"
+  add_foreign_key "orders", "addresses"
+  add_foreign_key "orders", "collects"
+  add_foreign_key "orders", "users"
 end
