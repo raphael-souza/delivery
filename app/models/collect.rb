@@ -1,7 +1,7 @@
 class Collect < ApplicationRecord
-  belongs_to :user
+  belongs_to :client
   has_many :orders
-  has_one :address, through: user
+  has_one :address, through: client
 
 
 end

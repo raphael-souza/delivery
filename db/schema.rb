@@ -46,10 +46,10 @@ ActiveRecord::Schema.define(version: 2022_01_20_110227) do
     t.string "status"
     t.decimal "total_orders"
     t.float "total_value"
-    t.bigint "user_id", null: false
+    t.bigint "client_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_collects_on_user_id"
+    t.index ["client_id"], name: "index_collects_on_client_id"
   end
 
   create_table "deliverymen", force: :cascade do |t|
@@ -74,13 +74,13 @@ ActiveRecord::Schema.define(version: 2022_01_20_110227) do
     t.boolean "paid_aout"
     t.decimal "value"
     t.bigint "address_id", null: false
-    t.bigint "collect_id", null: false
-    t.bigint "user_id", null: false
+    t.bigint "collect_id"
+    t.bigint "client_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["address_id"], name: "index_orders_on_address_id"
+    t.index ["client_id"], name: "index_orders_on_client_id"
     t.index ["collect_id"], name: "index_orders_on_collect_id"
-    t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
   create_table "rooms", force: :cascade do |t|
@@ -103,9 +103,9 @@ ActiveRecord::Schema.define(version: 2022_01_20_110227) do
 
   add_foreign_key "addresses", "clients"
   add_foreign_key "addresses", "deliverymen"
-  add_foreign_key "collects", "users"
+  add_foreign_key "collects", "clients"
   add_foreign_key "deliverymen", "users"
   add_foreign_key "orders", "addresses"
+  add_foreign_key "orders", "clients"
   add_foreign_key "orders", "collects"
-  add_foreign_key "orders", "users"
 end

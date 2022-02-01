@@ -5,7 +5,7 @@ class CreateCollect < ActiveRecord::Migration[6.1]
       t.string :status
       t.decimal :total_orders
       t.float :total_value
-      t.references :user, null: false, foreign_key: true
+      t.references :client, null: false, foreign_key: true
 
       t.timestamps
     end

@@ -6,8 +6,8 @@ class CreateOrder < ActiveRecord::Migration[6.1]
       t.boolean :paid_aout
       t.decimal :value
       t.references :address, null: false, foreign_key: true
-      t.references :collect, null: false, foreign_key: true
-      t.references :user, null: false, foreign_key: true
+      t.references :collect, null: true, foreign_key: true
+      t.references :client, null: false, foreign_key: true
 
       t.timestamps
     end

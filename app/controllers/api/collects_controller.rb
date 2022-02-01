@@ -1,4 +1,4 @@
-class Api::CollectsController < ApplicationController
+class Api::CollectsController < Api::BaseController
   def index
     render_jsonapi_response(CollectSerializer.new(Orders.all))
   end

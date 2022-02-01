@@ -11,6 +11,7 @@ class Api::OrdersController <  Api::BaseController
 
   def create
     order = Order.new(order_params)
+    order.client_id = current_user.client.id
 
     debugger 
     if order.save()
@@ -38,13 +39,12 @@ class Api::OrdersController <  Api::BaseController
   end
 
   def order_params
-    params.require(:order).permit(
+    params.require(:data).permit(
       :description,
       :recipient_name,
       :paid_aout,
       :value,
       :collect_id,
-      :user_id,
       address_attributes: [
         :description,
         :number,

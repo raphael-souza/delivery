@@ -5,7 +5,7 @@ class OrderSerializer
              :paid_aout,
              :value
   
-  belongs_to :user
+  belongs_to :client
   has_one :address
   has_one :collect
 end
