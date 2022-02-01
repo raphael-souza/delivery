@@ -2,7 +2,7 @@ class Api::OrdersController <  Api::BaseController
   include JsonApiParamsAdapter
 
   def index
-
+    render_jsonapi_response(OrderSerializer.new(@orders))
   end
 
   def show
@@ -11,10 +11,12 @@ class Api::OrdersController <  Api::BaseController
 
   def create
     order = Order.new(order_params)
-    if order.save
+
+    debugger 
+    if order.save()
       render_jsonapi_response(OrderSerializer.new(order))
     else
-      render_jsonapi_response(order.errors)
+      render_jsonapi_response(order.errors, status: 404)
     end
   end
 
@@ -32,10 +34,26 @@ class Api::OrdersController <  Api::BaseController
   end
 
   def set_orders
+    @orders = Orders.all
   end
 
   def order_params
     params.require(:order).permit(
-      :description, :status, :total_orders, :total_value)
+      :description,
+      :recipient_name,
+      :paid_aout,
+      :value,
+      :collect_id,
+      :user_id,
+      address_attributes: [
+        :description,
+        :number,
+        :reference,
+        :street,
+        :city,
+        :cep,
+        :district
+      ]
+    )
   end
 end

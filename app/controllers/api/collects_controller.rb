@@ -1,6 +1,6 @@
 class Api::CollectsController < ApplicationController
   def index
-
+    render_jsonapi_response(CollectSerializer.new(Orders.all))
   end
 
   def show
@@ -8,6 +8,7 @@ class Api::CollectsController < ApplicationController
   end
 
   def create
+    debugger 
     collect = Collect.new(collect_params)
     if collect.save
       render_jsonapi_response(CollectSerializer.new(collect))
@@ -29,17 +30,15 @@ class Api::CollectsController < ApplicationController
   def set_collect
   end
 
-  def set_collections
+  def set_collects
   end
 
   def collect_params
     params.require(:collect).permit(
       :description, 
-      :recipient_name, 
-      :paid_aout, 
-      :value, 
-      :address_id, 
-      :collect_id, 
-      :user_id)
+      :status, 
+      :total_orders, 
+      :total_value
+    )
   end
 end
