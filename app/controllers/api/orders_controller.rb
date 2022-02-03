@@ -13,7 +13,6 @@ class Api::OrdersController <  Api::BaseController
     order = Order.new(order_params)
     order.client_id = current_user.client.id
 
-    debugger 
     if order.save()
       render_jsonapi_response(OrderSerializer.new(order))
     else

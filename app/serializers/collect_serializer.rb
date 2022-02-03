@@ -7,6 +7,6 @@ class CollectSerializer
              :created_at,
              :updated_at
   
-  belongs_to :user
-  has_one :address, through: user
+  belongs_to :client
+  has_one :address, through: :client
 end
