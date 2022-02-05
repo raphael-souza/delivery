@@ -1,12 +1,15 @@
 class Api::OrdersController <  Api::BaseController
   include JsonApiParamsAdapter
 
+  before_action :set_order, only: [:show, :update, :destroy]
+  before_action :set_orders, only: [:index]
+
   def index
     render_jsonapi_response(OrderSerializer.new(@orders))
   end
 
   def show
-
+    render_jsonapi_response(OrderSerializer.new(@order))
   end
 
   def create
@@ -34,7 +37,7 @@ class Api::OrdersController <  Api::BaseController
   end
 
   def set_orders
-    @orders = Orders.all
+    @orders = current_user.client.orders
   end
 
   def order_params
