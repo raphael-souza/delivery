@@ -3,7 +3,8 @@ class OrderSerializer
   attributes :description,
              :recipient_name,
              :paid_aout,
-             :value
+             :value,
+             :created_at
   
   belongs_to :client
   has_one :address

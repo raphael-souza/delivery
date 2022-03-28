@@ -33,8 +33,7 @@ class Api::CollectsController < Api::BaseController
 
   private
 
-  def set_collect
-    debugger 
+  def set_collect 
     @collect = current_user.client.collects
   end
 
