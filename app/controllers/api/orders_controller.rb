@@ -21,7 +21,7 @@ class Api::OrdersController <  Api::BaseController
 
       # notifica a criação de um pedido
       account_sid = "ACce90dc12414d773e52b5f0616593a6a2" # Your Test Account SID from www.twilio.com/console/settings
-      auth_token = "d0c26c5390a5162213855bf92fbbcda0"   # Your Test Auth Token from www.twilio.com/console/settings
+      auth_token = "2c3e9e50820c92842feaa3eb042e7e9d"   # Your Test Auth Token from www.twilio.com/console/settings
 
       #  SMS
       # @client = Twilio::REST::Client.new account_sid, auth_token
@@ -39,15 +39,22 @@ class Api::OrdersController <  Api::BaseController
       # auth_token = ENV['TWILIO_AUTH_TOKEN']
       @client = Twilio::REST::Client.new(account_sid, auth_token) 
  
-      message = @client.messages.create( 
-                body: 'Mensgaem do zap do ruby!!! :)', 
-                from: 'whatsapp:+14155238886',       
-                to: 'whatsapp:+553799487508' 
-              ) 
+      # message = @client.messages.create( 
+      #           body: 'Mensgaem do zap do ruby!!! :)', 
+      #           from: 'whatsapp:+14155238886',
+      #           status_callback: 'https://timberwolf-mastiff-9776.twil.io/sandbox-r2tec-status',       
+      #           to: 'whatsapp:+553799487508' ,
+      #         ) 
  
-      puts message.sid
-
-      render_jsonapi_response(OrderSerializer.new(order))
+      # puts message.sid
+      # debugger  
+      messages = @client.messages.list(limit: 20)      
+      # render_jsonapi_response(OrderSerializer.new(order))
+      array_message = []
+      messages.each do |record|
+        array_message <<  {sid: record.sid, body: record.body, from: record.from, to: record.to } 
+      end 
+      render json: array_message, status: :ok
     else
       render_jsonapi_response(order.errors, status: 404)
     end
