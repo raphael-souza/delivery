@@ -3,7 +3,7 @@ class Api::OrdersController <  Api::BaseController
   include JsonApiParamsAdapter
 
   before_action :set_order, only: [:show, :update, :destroy]
-  before_action :set_orders, only: [:index]
+  before_action :set_orders, only: [:index, :request_withdrawal]
 
   def index
     render_jsonapi_response(OrderSerializer.new(@orders))
@@ -18,43 +18,7 @@ class Api::OrdersController <  Api::BaseController
     order.client_id = current_user.client.id
 
     if order.save()
-
-      # notifica a criação de um pedido
-      account_sid = "ACce90dc12414d773e52b5f0616593a6a2" # Your Test Account SID from www.twilio.com/console/settings
-      auth_token = "2c3e9e50820c92842feaa3eb042e7e9d"   # Your Test Auth Token from www.twilio.com/console/settings
-
-      #  SMS
-      # @client = Twilio::REST::Client.new account_sid, auth_token
-      # message = @client.messages.create(
-      #   body: "Hello from Ruby\n Esta mensagem foi disparada através da minas aplicação Ruby!",
-      #   to: "+5537999487508",    # Replace with your phone number
-      #   from: "+14155238886")  # Use this Magic Number for creating SMS
-
-      # puts message.sid
-
-      # via whatsApp
-      # Find your Account SID and Auth Token at twilio.com/console
-      # and set the environment variables. See http://twil.io/secure
-      # account_sid = ENV['TWILIO_ACCOUNT_SID']
-      # auth_token = ENV['TWILIO_AUTH_TOKEN']
-      @client = Twilio::REST::Client.new(account_sid, auth_token) 
- 
-      # message = @client.messages.create( 
-      #           body: 'Mensgaem do zap do ruby!!! :)', 
-      #           from: 'whatsapp:+14155238886',
-      #           status_callback: 'https://timberwolf-mastiff-9776.twil.io/sandbox-r2tec-status',       
-      #           to: 'whatsapp:+553799487508' ,
-      #         ) 
- 
-      # puts message.sid
-      # debugger  
-      messages = @client.messages.list(limit: 20)      
-      # render_jsonapi_response(OrderSerializer.new(order))
-      array_message = []
-      messages.each do |record|
-        array_message <<  {sid: record.sid, body: record.body, from: record.from, to: record.to } 
-      end 
-      render json: array_message, status: :ok
+      render_jsonapi_response(OrderSerializer.new(order))
     else
       render_jsonapi_response(order.errors, status: 404)
     end
@@ -68,6 +32,12 @@ class Api::OrdersController <  Api::BaseController
 
   end
 
+  #POST solicitar retidada de pedido(s) 
+  def request_withdrawal
+
+    render_jsonapi_response(OrderSerializer.new(@orders))
+  end
+
   private
 
   def set_order
@@ -75,7 +45,7 @@ class Api::OrdersController <  Api::BaseController
 
   def set_orders 
     raise ActiveRecord::RecordNotFound unless current_user
-    @orders = current_user.client.orders
+    @orders = current_user.client.orders.where(filter_params)
   end
 
   def order_params
@@ -95,5 +65,9 @@ class Api::OrdersController <  Api::BaseController
         :district
       ]
     )
+  end
+
+  def filter_params
+    params[:filter] ? params.require(:filter).permit(id: []) : {}
   end
 end

@@ -3,5 +3,4 @@ class Collect < ApplicationRecord
   has_many :orders
   has_one :address, through: :client
 
-
 end

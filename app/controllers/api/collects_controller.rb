@@ -1,7 +1,7 @@
 class Api::CollectsController < Api::BaseController
   include JsonApiParamsAdapter
 
-  before_action :set_collects, only: [:index]
+  before_action :set_collects, only: [:index, :request_withdrawal]
   before_action :set_collect, only: [:show, :update, :destroy]
   
   def show
@@ -12,9 +12,13 @@ class Api::CollectsController < Api::BaseController
     render_jsonapi_response(CollectSerializer.new(@collects))
   end
 
-  def create 
+  def create
     collect = Collect.new(collect_params) 
     collect.client_id = current_user.client.id
+
+
+    # problema está em associar as orders à collect
+
 
     if collect.save
       render_jsonapi_response(CollectSerializer.new(collect))
@@ -22,10 +26,12 @@ class Api::CollectsController < Api::BaseController
       render_jsonapi_response(collect.errors)
     end
   end
-
-  def update
+  #POST solicitar retidada de pedido(s) 
+  def request_withdrawal
 
   end
+
+  def 
 
   def destroy
 
@@ -34,10 +40,10 @@ class Api::CollectsController < Api::BaseController
   private
 
   def set_collect 
-    @collect = current_user.client.collects
+    @collect = current_user.client.collects.where(filter_params)
   end
 
-  def set_collects
+  def set_collects 
     @collects = current_user.client.collects
   end
 
@@ -46,23 +52,11 @@ class Api::CollectsController < Api::BaseController
       :description, 
       :status, 
       :total_orders, 
-      :total_value,
-      orders_attributes: [
-        :description,
-        :recipient_name,
-        :paid_aout,
-        :value,
-        :collect_id,
-        address_attributes: [
-          :description,
-          :number,
-          :reference,
-          :street,
-          :city,
-          :cep,
-          :district
-        ]
-      ]
+      :total_value
     )
+  end
+
+  def filter_params
+    params[:filter] ? params.require(:filter).permit(:id) : {}
   end
 end

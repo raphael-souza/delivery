@@ -9,4 +9,5 @@ class CollectSerializer
   
   belongs_to :client
   has_one :address, through: :client
+  has_many :orders
 end

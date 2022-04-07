@@ -1,7 +1,18 @@
 Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
-    resources :users, :orders, :collects
+    resources :users
+    resources :collects
+    resources :orders do 
+      collection do
+        post :request_withdrawal
+      end
+    end
+    resources :messages do 
+      collection do
+        post :bot
+      end
+    end
   end
 
   resources :rooms, only: [:index, :create]
