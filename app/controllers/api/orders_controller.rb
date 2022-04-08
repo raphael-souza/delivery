@@ -34,8 +34,24 @@ class Api::OrdersController <  Api::BaseController
 
   #POST solicitar retidada de pedido(s) 
   def request_withdrawal
-
-    render_jsonapi_response(OrderSerializer.new(@orders))
+    debugger 
+    if @orders.update_all(collect_id: order_params[:collect_id]) 
+      # deve gerar pedido de coleta
+      # atualizar campos da coleta como contagem e status
+      # pedido deve estar com status diferente sinalizando que está em preocess ode entrega
+      # notificar os entregadores
+      
+      payload_params = []
+      params[:data][:delivery_men][:id].each do |id|
+        payload_params << { collect_id: order_params[:collect_id], deliveryman_id: id }
+      end
+      
+      CollectDeliveryman.create(payload_params)
+      
+      render_jsonapi_response(OrderSerializer.new(@orders))
+    else
+      render_jsonapi_response(@orders.errors, status: :unprocessable_entity)
+    end
   end
 
   private

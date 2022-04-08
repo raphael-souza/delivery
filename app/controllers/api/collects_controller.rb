@@ -1,7 +1,7 @@
 class Api::CollectsController < Api::BaseController
   include JsonApiParamsAdapter
 
-  before_action :set_collects, only: [:index, :request_withdrawal]
+  before_action :set_collects, only: [:index]
   before_action :set_collect, only: [:show, :update, :destroy]
   
   def show
@@ -26,15 +26,13 @@ class Api::CollectsController < Api::BaseController
       render_jsonapi_response(collect.errors)
     end
   end
-  #POST solicitar retidada de pedido(s) 
-  def request_withdrawal
 
+  def update
+    # TODO implementar
   end
 
-  def 
-
   def destroy
-
+    # TODO implementar
   end
 
   private
