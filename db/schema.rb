@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_20_110227) do
+ActiveRecord::Schema.define(version: 2022_04_08_113032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,16 @@ ActiveRecord::Schema.define(version: 2022_01_20_110227) do
     t.index ["user_id"], name: "index_clients_on_user_id"
   end
 
+  create_table "collect_deliverymen", force: :cascade do |t|
+    t.string "status"
+    t.bigint "collect_id"
+    t.bigint "deliveryman_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["collect_id"], name: "index_collect_deliverymen_on_collect_id"
+    t.index ["deliveryman_id"], name: "index_collect_deliverymen_on_deliveryman_id"
+  end
+
   create_table "collects", force: :cascade do |t|
     t.string "description"
     t.string "status"
@@ -56,10 +66,9 @@ ActiveRecord::Schema.define(version: 2022_01_20_110227) do
     t.string "name"
     t.string "cpf"
     t.string "phone"
-    t.bigint "user_id", null: false
+    t.string "client_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_deliverymen_on_user_id"
   end
 
   create_table "jwt_denylist", force: :cascade do |t|
@@ -83,12 +92,6 @@ ActiveRecord::Schema.define(version: 2022_01_20_110227) do
     t.index ["collect_id"], name: "index_orders_on_collect_id"
   end
 
-  create_table "rooms", force: :cascade do |t|
-    t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -103,8 +106,9 @@ ActiveRecord::Schema.define(version: 2022_01_20_110227) do
 
   add_foreign_key "addresses", "clients"
   add_foreign_key "addresses", "deliverymen"
+  add_foreign_key "collect_deliverymen", "collects"
+  add_foreign_key "collect_deliverymen", "deliverymen"
   add_foreign_key "collects", "clients"
-  add_foreign_key "deliverymen", "users"
   add_foreign_key "orders", "addresses"
   add_foreign_key "orders", "clients"
   add_foreign_key "orders", "collects"

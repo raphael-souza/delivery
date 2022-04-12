@@ -15,6 +15,7 @@ class Api::OrdersController <  Api::BaseController
 
   def create
     order = Order.new(order_params)
+
     order.client_id = current_user.client.id
 
     if order.save()
@@ -45,7 +46,7 @@ class Api::OrdersController <  Api::BaseController
       params[:data][:delivery_men][:id].each do |id|
         payload_params << { collect_id: order_params[:collect_id], deliveryman_id: id }
       end
-      
+      debugger 
       CollectDeliveryman.create(payload_params)
       
       render_jsonapi_response(OrderSerializer.new(@orders))

@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     resources :users
     resources :collects
+    resources :deliverymen
     resources :orders do 
       collection do
         post :request_withdrawal
@@ -14,9 +15,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  resources :rooms, only: [:index, :create]
-  mount ActionCable.server => '/cable'
   
   devise_for :users,
     defaults: { format: :json },

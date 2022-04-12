@@ -52,21 +52,6 @@ class Api::UsersController < Api::BaseController
           :cep,
           :district
         ]
-      ],
-      deliveryman_attributes: [
-        :id,
-        :name,
-        :cpf,
-        :phone,
-        address_attributes: [
-          :description,
-          :number,
-          :reference,
-          :street,
-          :city,
-          :cep,
-          :district
-        ]
       ]
     )
   end

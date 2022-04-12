@@ -3,7 +3,6 @@ class UserSerializer
   set_type :user
   attributes :email
 
-  has_one :client
   has_one :deliveryman
 
   # link :self do
