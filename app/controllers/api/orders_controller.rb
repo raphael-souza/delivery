@@ -35,20 +35,24 @@ class Api::OrdersController <  Api::BaseController
 
   #POST solicitar retidada de pedido(s) 
   def request_withdrawal
-    debugger 
-    if @orders.update_all(collect_id: order_params[:collect_id]) 
-      # deve gerar pedido de coleta
-      # atualizar campos da coleta como contagem e status
-      # pedido deve estar com status diferente sinalizando que está em preocess ode entrega
-      # notificar os entregadores
-      
-      payload_params = []
-      params[:data][:delivery_men][:id].each do |id|
-        payload_params << { collect_id: order_params[:collect_id], deliveryman_id: id }
-      end
+    # deve gerar pedido de coleta
+    # atualizar campos da coleta como contagem e status
+    # pedido deve estar com status diferente sinalizando que está em preocess ode entrega
+    # notificar os entregadores
+       
+    payload_params = []
+    params[:data][:delivery_men][:id].each do |id|
+      payload_params << { collect_id: order_params[:collect_id], deliveryman_id: id }
+    end
+    
+    if @orders.update_all(collect_id: order_params[:collect_id])
+      collect_deliverymen = CollectDeliveryman.create(payload_params)
+      # TODO: pode ser criado um observer para isso no after_create
       debugger 
-      CollectDeliveryman.create(payload_params)
-      
+      collect_deliverymen.each do |collect_d|
+        NotifyCollectionRequestWorker.perform_in(collect_d.id)
+      end
+
       render_jsonapi_response(OrderSerializer.new(@orders))
     else
       render_jsonapi_response(@orders.errors, status: :unprocessable_entity)
@@ -60,7 +64,7 @@ class Api::OrdersController <  Api::BaseController
   def set_order
   end
 
-  def set_orders 
+  def set_orders  
     raise ActiveRecord::RecordNotFound unless current_user
     @orders = current_user.client.orders.where(filter_params)
   end

@@ -24,3 +24,5 @@ Things you may want to cover:
 
 * exibir qual processo na porta do postgresql: sudo ss -lptn 'sport = :5432'
 * finalizar processo:  sudo kill PID
+* iniciar servidor do sidekiq
+  - bundle exec sidekiq

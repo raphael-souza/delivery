@@ -28,6 +28,9 @@ gem 'fast_jsonapi'
 # twilio - enviar msg pelo zap
 gem 'twilio-ruby', '~> 5.66'
 
+#sidekiq comunicação entre processos paralelos
+gem 'sidekiq', '~>6.0.0'
+
 group :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
