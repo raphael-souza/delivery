@@ -1,27 +1,20 @@
 Rails.application.routes.draw do
-  resources :businesses
-  resources :shippings
-  resources :orders
-  resources :clients
-  resources :managers
-  resources :merchants
-  resources :deliverymen
-  resources :vehicles
-  resources :addresses
-  resources :cities
-  resources :states
-  resources :users
+
+  namespace :api, defaults: { format: :json } do
+    resources :users
+
+  end
+  
   devise_for :users,
+    defaults: { format: :json },
     path: '',
     path_names: {
-      sign_in: 'login',
-      sign_out: 'logout',
-      registration: 'signup'
+      sign_in: 'api/login',
+      sign_out: 'api/logout',
+      # registration: 'api/signup'
     },
     controllers: {
       sessions: 'sessions',
       registrations: 'registrations'
     }
-  
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end
