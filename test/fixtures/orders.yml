@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  key: 
+  description: MyText
+  delivered: false
+  references: 
+  references: 
+
+two:
+  key: 
+  description: MyText
+  delivered: false
+  references: 
+  references: 
