@@ -1,9 +1,11 @@
-class UserSerializer
+class ClientSerializer
   include FastJsonapi::ObjectSerializer
-  set_type :user
-  attributes :email
+  set_type :client
+  attributes :name, :cpf, :phone
 
-  has_one :client
+  has_many :address 
+
+
 
   # link :self do
   #   debugger 

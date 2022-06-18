@@ -1,5 +1,7 @@
 class Deliveryman < ApplicationRecord
-  # entregador
-  belongs_to :address
-  belongs_to :vehicle
+  has_many :address
+  has_many :collects
+
+  accepts_nested_attributes_for :address, :allow_destroy => true
+
 end

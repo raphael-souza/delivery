@@ -24,3 +24,8 @@ docker run -d -p 5432:5432 -v "volume_db_postgres:/var/lib/postgresql/data" -e P
 * Deployment instructions
 
 * ...
+
+* exibir qual processo na porta do postgresql: sudo ss -lptn 'sport = :5432'
+* finalizar processo:  sudo kill PID
+* iniciar servidor do sidekiq
+  - bundle exec sidekiq

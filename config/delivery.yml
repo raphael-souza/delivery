@@ -1,0 +1,8 @@
+develop:
+  twilio_auth_token: <%= (ENV['TWILIO_AUTH_TOKEN'] || "b71db2e175137262bbfebe741319cde9")
+
+test:
+  twilio_auth_token: <%= (ENV['TWILIO_AUTH_TOKEN'] || "")
+
+production:
+  twilio_auth_token: <%= (ENV['TWILIO_AUTH_TOKEN'] || "")

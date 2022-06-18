@@ -1,4 +1,9 @@
 class Order < ApplicationRecord
-  # Pedido
-  # pertence a uma loja e pode ser atribuido a um cliente e entregador até finalizar seu processo
+
+  belongs_to :address
+  belongs_to :collect, optional: true 
+  belongs_to :client
+
+  accepts_nested_attributes_for :address, :allow_destroy => true
+
 end
