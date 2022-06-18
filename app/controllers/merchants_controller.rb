@@ -1,4 +1,6 @@
 class MerchantsController < ApplicationController
+  before_action :authenticate_user!
+
   before_action :set_merchant, only: [:show, :update, :destroy]
 
   # GET /merchants
