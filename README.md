@@ -12,6 +12,9 @@ Things you may want to cover:
 
 * Database creation
 
+docker volume create volume_db_postgres
+docker run -d -p 5432:5432 -v "volume_db_postgres:/var/lib/postgresql/data" -e POSTGRES_PASSWORD=admin123 -e PRIMARY_USER=postgres postgres
+
 * Database initialization
 
 * How to run the test suite
