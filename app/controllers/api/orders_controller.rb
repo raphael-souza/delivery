@@ -48,9 +48,9 @@ class Api::OrdersController <  Api::BaseController
     if @orders.update_all(collect_id: order_params[:collect_id])
       collect_deliverymen = CollectDeliveryman.create(payload_params)
       # TODO: pode ser criado um observer para isso no after_create
-      debugger 
-      collect_deliverymen.each do |collect_d|
-        NotifyCollectionRequestWorker.perform_in(collect_d.id)
+ 
+      collect_deliverymen.each do |collect_d| 
+        NotifyCollectionRequestWorker.perform_async(collect_d.id)
       end
 
       render_jsonapi_response(OrderSerializer.new(@orders))
