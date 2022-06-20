@@ -6,6 +6,8 @@ class CreateDeliverymen < ActiveRecord::Migration[6.1]
       t.string :phone
       t.string :client_id
 
+      t.references :user
+
       t.timestamps
     end
   end

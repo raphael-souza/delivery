@@ -10,56 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_08_113032) do
+ActiveRecord::Schema.define(version: 2022_01_18_111214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "addresses", force: :cascade do |t|
-    t.string "description"
-    t.string "number"
-    t.string "reference"
-    t.string "street"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "city"
-    t.string "cep", limit: 9
-    t.string "district"
-    t.bigint "client_id"
-    t.bigint "deliveryman_id"
-    t.index ["client_id"], name: "index_addresses_on_client_id"
-    t.index ["deliveryman_id"], name: "index_addresses_on_deliveryman_id"
-  end
-
-  create_table "clients", force: :cascade do |t|
-    t.string "name"
-    t.string "cpf"
-    t.string "phone"
-    t.bigint "user_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_clients_on_user_id"
-  end
-
-  create_table "collect_deliverymen", force: :cascade do |t|
-    t.string "status"
-    t.bigint "collect_id"
-    t.bigint "deliveryman_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["collect_id"], name: "index_collect_deliverymen_on_collect_id"
-    t.index ["deliveryman_id"], name: "index_collect_deliverymen_on_deliveryman_id"
-  end
-
   create_table "collects", force: :cascade do |t|
     t.string "description"
     t.string "status"
-    t.decimal "total_orders"
-    t.float "total_value"
-    t.bigint "client_id", null: false
+    t.bigint "store_id", null: false
+    t.bigint "orders_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["client_id"], name: "index_collects_on_client_id"
+    t.index ["orders_id"], name: "index_collects_on_orders_id"
+    t.index ["store_id"], name: "index_collects_on_store_id"
   end
 
   create_table "deliverymen", force: :cascade do |t|
@@ -67,8 +31,10 @@ ActiveRecord::Schema.define(version: 2022_04_08_113032) do
     t.string "cpf"
     t.string "phone"
     t.string "client_id"
+    t.bigint "user_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_deliverymen_on_user_id"
   end
 
   create_table "jwt_denylist", force: :cascade do |t|
@@ -78,18 +44,24 @@ ActiveRecord::Schema.define(version: 2022_04_08_113032) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.string "description"
-    t.string "recipient_name"
-    t.boolean "paid_aout"
-    t.decimal "value"
-    t.bigint "address_id", null: false
-    t.bigint "collect_id"
-    t.bigint "client_id", null: false
+    t.decimal "key"
+    t.text "description"
+    t.string "status"
+    t.bigint "stores_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["address_id"], name: "index_orders_on_address_id"
-    t.index ["client_id"], name: "index_orders_on_client_id"
-    t.index ["collect_id"], name: "index_orders_on_collect_id"
+    t.index ["stores_id"], name: "index_orders_on_stores_id"
+  end
+
+  create_table "stores", force: :cascade do |t|
+    t.string "name"
+    t.string "cpf"
+    t.string "cnpj"
+    t.string "phone"
+    t.bigint "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_stores_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -100,16 +72,16 @@ ActiveRecord::Schema.define(version: 2022_04_08_113032) do
     t.datetime "remember_created_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "addresses", "clients"
-  add_foreign_key "addresses", "deliverymen"
-  add_foreign_key "collect_deliverymen", "collects"
-  add_foreign_key "collect_deliverymen", "deliverymen"
-  add_foreign_key "collects", "clients"
-  add_foreign_key "orders", "addresses"
-  add_foreign_key "orders", "clients"
-  add_foreign_key "orders", "collects"
+  add_foreign_key "collects", "orders", column: "orders_id"
+  add_foreign_key "collects", "stores"
+  add_foreign_key "orders", "stores", column: "stores_id"
 end

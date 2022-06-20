@@ -3,9 +3,8 @@ class CreateOrders < ActiveRecord::Migration[6.1]
     create_table :orders do |t|
       t.numeric :key
       t.text :description
-      t.boolean :delivered
-      t.references :clients, null: false, foreign_key: true
-      t.references :address, null: false, foreign_key: true
+      t.string :status
+      t.references :stores, null: false, foreign_key: true
 
       t.timestamps
     end
