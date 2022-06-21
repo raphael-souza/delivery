@@ -3,9 +3,6 @@ class DeliverymanSerializer
   set_type :deliveryman
   attributes :name, :cpf, :phone
 
-  has_many :address
-
-
 
   # link :self do
   #   debugger 

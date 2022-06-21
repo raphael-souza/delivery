@@ -38,20 +38,11 @@ class Api::UsersController < Api::BaseController
   def update_user_params
     params.require(:data).permit(
       :email,
-      client_attributes: [
+      store_attributes: [
         :id,
         :name,
         :cpf,
-        :phone,
-        address_attributes: [
-          :description,
-          :number,
-          :reference,
-          :street,
-          :city,
-          :cep,
-          :district
-        ]
+        :phone
       ]
     )
   end

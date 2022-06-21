@@ -2,11 +2,10 @@ class OrderSerializer
   include FastJsonapi::ObjectSerializer
   attributes :description,
              :recipient_name,
-             :paid_aout,
+             :paid_out,
              :value,
              :created_at
   
-  belongs_to :client
-  has_one :address
+  belongs_to :store
   has_one :collect
 end

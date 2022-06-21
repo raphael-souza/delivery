@@ -14,7 +14,7 @@ class Api::CollectsController < Api::BaseController
 
   def create
     collect = Collect.new(collect_params) 
-    collect.client_id = current_user.client.id
+    collect.store_id = current_user.store.id
 
 
     # problema está em associar as orders à collect
@@ -38,11 +38,11 @@ class Api::CollectsController < Api::BaseController
   private
 
   def set_collect 
-    @collect = current_user.client.collects.where(filter_params)
+    @collect = current_user.store.collects.where(filter_params)
   end
 
   def set_collects 
-    @collects = current_user.client.collects
+    @collects = current_user.store.collects
   end
 
   def collect_params

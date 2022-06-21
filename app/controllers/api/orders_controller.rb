@@ -16,7 +16,7 @@ class Api::OrdersController <  Api::BaseController
   def create
     order = Order.new(order_params)
 
-    order.client_id = current_user.client.id
+    order.store_id = current_user.store.id
 
     if order.save()
       render_jsonapi_response(OrderSerializer.new(order))

@@ -1,5 +1,5 @@
 class Collect < ApplicationRecord
-  belongs_to :client
+  belongs_to :store
   has_many :orders, optional: true 
   
 end

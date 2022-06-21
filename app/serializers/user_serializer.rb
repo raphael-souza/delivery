@@ -2,6 +2,7 @@ class UserSerializer
   include FastJsonapi::ObjectSerializer
   set_type :user
   attributes :email
+  has_one :store
 
   # link :self do
   #   debugger 
