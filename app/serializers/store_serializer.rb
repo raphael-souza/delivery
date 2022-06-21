@@ -1,9 +1,9 @@
-class UserSerializer
+class StoreSerializer
   include FastJsonapi::ObjectSerializer
-  set_type :user
-  attributes :email
+  set_type :store
+  attributes :id, :name, :cpf, :cnpj, :phone, :created_at
   
-  has_one :store
+  # belongs_to :user
 
   # link :self do
   #   debugger 
