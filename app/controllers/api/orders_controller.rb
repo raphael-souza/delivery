@@ -66,25 +66,16 @@ class Api::OrdersController <  Api::BaseController
 
   def set_orders  
     raise ActiveRecord::RecordNotFound unless current_user
-    @orders = current_user.client.orders.where(filter_params)
+    @orders = current_user.store.orders.where(filter_params)
   end
 
   def order_params
     params.require(:data).permit(
       :description,
       :recipient_name,
-      :paid_aout,
+      :paid_out,
       :value,
-      :collect_id,
-      address_attributes: [
-        :description,
-        :number,
-        :reference,
-        :street,
-        :city,
-        :cep,
-        :district
-      ]
+      :collect_id
     )
   end
 

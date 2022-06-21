@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_01_18_111214) do
+ActiveRecord::Schema.define(version: 2022_06_21_114846) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,10 +19,10 @@ ActiveRecord::Schema.define(version: 2022_01_18_111214) do
     t.string "description"
     t.string "status"
     t.bigint "store_id", null: false
-    t.bigint "orders_id", null: false
+    t.bigint "deliverymen_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["orders_id"], name: "index_collects_on_orders_id"
+    t.index ["deliverymen_id"], name: "index_collects_on_deliverymen_id"
     t.index ["store_id"], name: "index_collects_on_store_id"
   end
 
@@ -44,13 +44,17 @@ ActiveRecord::Schema.define(version: 2022_01_18_111214) do
   end
 
   create_table "orders", force: :cascade do |t|
-    t.decimal "key"
     t.text "description"
     t.string "status"
-    t.bigint "stores_id", null: false
+    t.string "recipient_name"
+    t.boolean "paid_out"
+    t.float "value"
+    t.bigint "store_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["stores_id"], name: "index_orders_on_stores_id"
+    t.bigint "collect_id"
+    t.index ["collect_id"], name: "index_orders_on_collect_id"
+    t.index ["store_id"], name: "index_orders_on_store_id"
   end
 
   create_table "stores", force: :cascade do |t|
@@ -81,7 +85,8 @@ ActiveRecord::Schema.define(version: 2022_01_18_111214) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "collects", "orders", column: "orders_id"
+  add_foreign_key "collects", "deliverymen", column: "deliverymen_id"
   add_foreign_key "collects", "stores"
-  add_foreign_key "orders", "stores", column: "stores_id"
+  add_foreign_key "orders", "collects"
+  add_foreign_key "orders", "stores"
 end
