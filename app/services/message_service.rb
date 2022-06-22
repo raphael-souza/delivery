@@ -2,7 +2,7 @@ class MessageService
 
   def initialize 
     account_sid = "ACce90dc12414d773e52b5f0616593a6a2" # Your Test Account SID from www.twilio.com/console/settings
-    auth_token = "b71db2e175137262bbfebe741319cde9" # tem que atualizar sempre esse token
+    auth_token = "95237c21624cdf93af69e6ef30d1ddf7" # tem que atualizar sempre esse token
     @from = '+14155238886' # número do twilio para disparar as mensagens
 
     @to = '+5537999487508'
@@ -17,18 +17,6 @@ class MessageService
       # erro ao criar conexão com Twilio
       raise errors
     end
-  end
-
-  def list_messages
-    array_message = []
-
-    messages = @client.messages.list(from: 'whatsapp:+553799487508', date_sent: Time.now, limit: 20)      
-
-    messages.each do |record| 
-      array_message <<  {sid: record.sid, body: record.body, from: record.from, to: record.to } 
-    end 
-    
-    return array_message
   end
 
   def send_whatsapp_message(to, body_message)
@@ -56,7 +44,7 @@ class MessageService
     return message
   end
 
-  def list_whatsapp_messages_by_filter(to=nil, from=nil, date_sent=nil)
+  def list_whatsapp_messages(to=nil, from=nil)
     to ||= '+5537999487508'
     from ||= @from
 

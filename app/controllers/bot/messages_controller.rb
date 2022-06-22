@@ -1,4 +1,4 @@
-class Api::MessagesController < ApplicationController
+class Bot::MessagesController < ApplicationController
   include JsonApiParamsAdapter
   include ActionController::MimeResponds
 
@@ -7,13 +7,7 @@ class Api::MessagesController < ApplicationController
   
   def index
     message_service = MessageService.new()
-    messages = message_service.list_messages()
-    # messages = message_service.conversation()
-    # messages = message_service.list_whatsapp_messages_by_filter()
-
-    #id da Jessica na conversa => MBa8a5f3ed485f4a5582218259d4c5979e
-    #id Raphael => CHdfc00ad4dab645c3b48c21c277d31aaa
-    # messages = message_service.add_participant_to_conversation('CHdfc00ad4dab645c3b48c21c277d31aaa')
+    messages = message_service.list_whatsapp_messages()
 
     render_jsonapi_response(messages)
   end
@@ -23,7 +17,7 @@ class Api::MessagesController < ApplicationController
     body = params["Body"].downcase
     response = Twilio::TwiML::MessagingResponse.new
 
-    response.message do |message|
+    response.message do |message| 
       if body.include?("ok")
         message.body("solicitação de coleta foi recebida! Venha até o ponto de venda imediatamente. Obrigado")
       elsif body.include?("cancelar")
@@ -34,17 +28,17 @@ class Api::MessagesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html
       format.xml { render :xml => response.to_xml }
     end
 
   end
 
-  def send_message
+  def create
     message_service = MessageService.new()
 
+    message = "mensagem da request #{ params[:message]}"
     begin
-      message = message_service.send_whatsapp_message('+5537999487508', 'corpo da mensagem')
+      message = message_service.send_whatsapp_message('+5537999487508', message)
       return render json: {sid: message.sid, body: message.body}, status: :ok
       
     rescue => errors

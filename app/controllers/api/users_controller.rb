@@ -6,7 +6,7 @@ class Api::UsersController < Api::BaseController
     options = {}
     includes = params[:include] || []
     options[:include] = includes.split(',')
-debugger 
+ 
     render_jsonapi_response(UserSerializer.new(@user, options))
   end
 

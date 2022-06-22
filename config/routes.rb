@@ -12,9 +12,12 @@ Rails.application.routes.draw do
         post :request_withdrawal
       end
     end
+  end
+
+  namespace :bot do
     resources :messages do 
       collection do
-        post :bot
+        post :bot, defaults: {format: :xml }
       end
     end
   end
