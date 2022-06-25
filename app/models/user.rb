@@ -6,6 +6,7 @@ class User < ApplicationRecord
         :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
 
   has_one :store
+  has_many :orders, through: :store
 
   accepts_nested_attributes_for :store
   

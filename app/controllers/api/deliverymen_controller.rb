@@ -34,21 +34,12 @@ class Api::DeliverymenController <  Api::BaseController
   end
 
   def permit_params
-
     params.require(:data).permit(
       :id,
       :name,
       :cpf,
-      :phone,
-      address_attributes: [
-        :description,
-        :number,
-        :reference,
-        :street,
-        :city,
-        :cep,
-        :district
-      ]
+      :phone
+      :user_id
       )
   end
 end

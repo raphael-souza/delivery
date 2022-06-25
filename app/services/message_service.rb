@@ -75,7 +75,6 @@ class MessageService
     .conversations
     .create(friendly_name: 'SMS-to-WhatsApp Exemplo de conversa ')
 
-    debugger 
     return { sid: conversation.sid, name: conversation.friendly_name }
   end
   #step 2

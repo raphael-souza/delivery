@@ -13,10 +13,8 @@ class Api::OrdersController <  Api::BaseController
     render_jsonapi_response(OrderSerializer.new(@order))
   end
 
-  def create
-    order = Order.new(order_params)
-
-    order.store_id = current_user.store.id
+  def create 
+    order = current_user.store.orders.new(order_params)
 
     if order.save()
       render_jsonapi_response(OrderSerializer.new(order))
@@ -26,7 +24,11 @@ class Api::OrdersController <  Api::BaseController
   end
 
   def update
-
+    if @order.update()
+      render_jsonapi_response(OrderSerializer.new(order))
+    else
+      render_jsonapi_response(order.errors, status: 404)
+    end
   end
 
   def destroy
@@ -62,20 +64,30 @@ class Api::OrdersController <  Api::BaseController
   private
 
   def set_order
+    @order = current_user.orders.find_by(id: params[:id])
+
+    return raise ActiveRecord::RecordNotFound unless @order
   end
 
-  def set_orders  
-    raise ActiveRecord::RecordNotFound unless current_user
+  def set_orders 
     @orders = current_user.store.orders.where(filter_params)
   end
 
   def order_params
     params.require(:data).permit(
+      :id,
       :description,
+      :status,
       :recipient_name,
       :paid_out,
       :value,
-      :collect_id
+      :store_id,
+      :created_at,
+      :updated_at,
+      :collect_id,
+      :formated_address,
+      :lat, 
+      :long,
     )
   end
 
