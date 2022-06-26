@@ -5,7 +5,7 @@ class CreateCollects < ActiveRecord::Migration[6.1]
       t.string :status
 
       t.references :store, null: false, foreign_key: true
-      t.references :deliverymen, null: true, foreign_key: true
+      t.references :deliveryman, null: true, foreign_key: true
 
       t.timestamps
     end
