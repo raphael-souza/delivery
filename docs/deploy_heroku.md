@@ -5,3 +5,6 @@
 refs. https://devcenter.heroku.com/articles/git#create-a-heroku-remote
 
 - logs -> `heroku logs`
+
+- criar uma variavel de ambiente
+  - heroku config:set GITHUB_USERNAME=joesmith

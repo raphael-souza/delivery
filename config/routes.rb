@@ -3,6 +3,9 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
 
   mount Sidekiq::Web => '/sidekiq'
+
+  root 'welcome#index'
+
   namespace :api, defaults: { format: :json } do
     resources :users
     resources :collects

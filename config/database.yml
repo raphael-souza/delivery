@@ -86,4 +86,4 @@ production:
   <<: *default
   database: delivery_2_production
   username: delivery_2
-  password: <%= ENV['DELIVERY_2_DATABASE_PASSWORD'] %>
+  password: <%= ENV['DELIVERY_2_DATABASE_PASSWORD'] || 'zhfiN!#WqAr&' %>
